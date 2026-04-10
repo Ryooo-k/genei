@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,4 +8,94 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  password    String
+  rating      Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  decks       Deck[]
+  gamePlayers GamePlayer[]
+}
+
+model GameMode {
+  id        String @id @default(cuid())
+  name      String
+  modeType  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  games     Game[]
+}
+
+model Hero {
+  id        String   @id @default(cuid())
+  name      String
+  maxHp     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  decks     Deck[]
+}
+
+model Card {
+  id        String     @id @default(cuid())
+  name      String
+  cost      Int
+  attack    Int?
+  hp        Int?
+  cardType  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deckCards DeckCard[]
+}
+
+model Deck {
+  id          String       @id @default(cuid())
+  name        String
+  userId      String
+  heroId      String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id])
+  hero        Hero         @relation(fields: [heroId], references: [id])
+  deckCards   DeckCard[]
+  gamePlayers GamePlayer[]
+}
+
+model DeckCard {
+  id        String   @id @default(cuid())
+  deckId    String
+  cardId    String
+  createdAt DateTime @default(now())
+  deck      Deck     @relation(fields: [deckId], references: [id])
+  card      Card     @relation(fields: [cardId], references: [id])
+}
+
+model Game {
+  id          String       @id @default(cuid())
+  gameModeId  String
+  status      String
+  startedAt   DateTime
+  finishedAt  DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  gameMode    GameMode     @relation(fields: [gameModeId], references: [id])
+  gamePlayers GamePlayer[]
+}
+
+model GamePlayer {
+  id           String   @id @default(cuid())
+  gameId       String
+  userId       String
+  deckId       String
+  result       String
+  ratingBefore Int
+  ratingAfter  Int
+  createdAt    DateTime @default(now())
+  game         Game     @relation(fields: [gameId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
+  deck         Deck     @relation(fields: [deckId], references: [id])
 }
