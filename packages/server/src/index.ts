@@ -13,7 +13,7 @@ registerAuthRoutes(fastify);
 setupAuthMiddleware(io);
 
 io.on("connection", (socket) => {
-  const user = (socket.request as any).user;
+  const user = (socket.request as { user?: { userId: string } }).user;
   fastify.log.info(`connected: ${socket.id} (userId: ${user?.userId})`);
 
   socket.on("disconnect", () => {

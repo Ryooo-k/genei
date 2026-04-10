@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import type { Server } from "socket.io";
-
-const JWT_SECRET = process.env.JWT_SECRET ?? "dev-secret";
+import { JWT_SECRET } from "../lib/config.js";
 
 export const setupAuthMiddleware = (io: Server) => {
   io.engine.use((req: any, _res: any, next: any) => {
