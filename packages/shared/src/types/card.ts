@@ -12,6 +12,7 @@ export interface UnitCard extends Card {
   type: "unit";
   attack: number;
   hp: number;
+  attackInterval: number;
 }
 
 export interface SpellCard extends Card {
