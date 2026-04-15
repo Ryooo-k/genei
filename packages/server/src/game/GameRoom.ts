@@ -80,7 +80,7 @@ export class GameRoom {
     this.io.to(this.gameId).emit("GAME_ENDED", { winnerId });
   }
 
-  private getOpponentId(playerId: string): string {
-    return Object.keys(this.state.players).find((id) => id !== playerId)!;
+  private getOpponentId(playerId: string): string | null {
+    return Object.keys(this.state.players).find((id) => id !== playerId) ?? null;
   }
 }
