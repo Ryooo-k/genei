@@ -7,6 +7,7 @@ export type FieldPosition = 0 | 1 | 2;
 export interface UnitOnField {
   card: UnitCard;
   damage: number;
+  attackTick: number;
 }
 
 export interface FieldEffectOnField {
